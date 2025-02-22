@@ -31,7 +31,6 @@ const upload = multer({
 
 
 router.post("/", upload.single("document"), (request, response) => {
-    console.log(request.file);
     Document.create({
         title: request.body.title || request.file.originalname,
         url: request.file.location,

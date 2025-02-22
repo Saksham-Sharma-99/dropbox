@@ -7,7 +7,7 @@ const verifyTokenMiddleware = async (req, res, next) => {
         "/api/user/login": "POST",
         "/api/user": "POST"
     }
-    console.log(req.originalUrl)
+
     if (routesToSkip[req.originalUrl] === req.method) {
         next()
         return
