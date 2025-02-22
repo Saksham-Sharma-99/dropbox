@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../configs/dbConfig');
 const { User } = require('./user');
+const { Document } = require('./document');
 
-const Session = sequelize.define('Session', {
+const AccessList = sequelize.define('AccessList', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,8 +17,16 @@ const Session = sequelize.define('Session', {
             key: 'id',
         },
     },
-    accessToken: {
-        type: DataTypes.TEXT,
+    documentId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'documents',
+            key: 'id',
+        },
+    },
+    accessType: {
+        type: DataTypes.ENUM('edit', 'read', 'owner'),
         allowNull: false,
     },
     status: {
@@ -37,16 +46,17 @@ const Session = sequelize.define('Session', {
     },
 }, {
     timestamps: true,
-    tableName: 'sessions',
+    tableName: 'accessLists',
 });
 
-belongsToUser = Session.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Session, { foreignKey: 'userId' });
+belongsToUser = AccessList.belongsTo(User, { foreignKey: 'userId' });
+belongsToDocument = AccessList.belongsTo(Document, { foreignKey: 'documentId' });
+User.hasMany(AccessList, { foreignKey: 'userId' });
 
 (async () => {
     await sequelize.sync();
 })();
 
 module.exports = {
-    Session,
+    AccessList,
 };

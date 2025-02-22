@@ -5,7 +5,7 @@ const aws = require("aws-sdk");
 const { v4: uuidV4 } = require("uuid");
 const router = express.Router();
 const dotenv = require("dotenv");
-const { Document } = require("../models/document");
+const { createDocument, getDocumentsList, getDocument } = require("../services/document");
 
 dotenv.config();
 
@@ -14,7 +14,6 @@ const s3 = new aws.S3({
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
-
 
 const upload = multer({
   storage: multerS3({
@@ -29,14 +28,34 @@ const upload = multer({
   }),
 });
 
+router.post("/", upload.single("document"), async (request, response) => {
+  const { newDocument, error: createError } = await createDocument({ file: request.file, ...request.body, user: request.user })
+  if (createError) {
+      return response.status(500).json({ createError });
+  }
+  
+  response.status(200).json(newDocument);
+});
 
-router.post("/", upload.single("document"), (request, response) => {
-    Document.create({
-        title: request.body.title || request.file.originalname,
-        url: request.file.location,
-    })
-    response.status(200).json({ success: true });
-  });
+router.get("/", async (request, response) => {
+    const page = request.query.page > 1 ? request.query.page : 1
+    const accessType = request.query.accessType
+    if (accessType && !['edit', 'read', 'owner'].includes(accessType)) {
+      response.status(400).json({ error: 'Invalid access type' })
+    }
+    const { documents, error: getError } = await getDocumentsList({ user: request.user, page, accessType })
+    if (getError) {
+        return response.status(500).json({ getError });
+    }
+    response.status(200).json(documents);
+});
 
+router.get("/:id", async (request, response) => {
+    const { document, error: getError, errorCode } = await getDocument({ id: request.params.id, user: request.user })
+    if (getError) {
+        return response.status(errorCode).json({ getError });
+    }
+    response.status(200).json(document);
+})
 
 module.exports = router;
