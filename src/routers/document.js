@@ -24,7 +24,7 @@ const upload = multer({
     expired: null,
     acl: "public-read",
     key: (req, file, cb) => {
-      cb(null, `${req.user?.id}/${Date.now()}-${uuidV4()}-${file.originalname}`);
+      cb(null, `${req.user.id}/${Date.now()}-${uuidV4()}-${file.originalname}`);
     },
   }),
 });
