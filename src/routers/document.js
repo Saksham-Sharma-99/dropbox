@@ -5,7 +5,15 @@ const aws = require("aws-sdk");
 const { v4: uuidV4 } = require("uuid");
 const router = express.Router();
 const dotenv = require("dotenv");
-const { createDocument, getDocumentsList, getDocument, validateShareParams, shareDocuments } = require("../services/document");
+const {
+  createDocument,
+  getDocumentsList,
+  getDocument,
+  validateShareParams,
+  shareDocuments,
+  validateUpdateParams,
+  updateDocument
+} = require("../services/document");
 
 dotenv.config();
 
@@ -75,6 +83,25 @@ router.post("/access", async (request, response) => {
 		return response.status(500).json({ shareError });
 	}
 	response.status(200).json({ success: true });
+})
+
+router.patch("/:id", async (request, response) => {
+  const { valid, error: validateError } = await validateUpdateParams({
+    documentId: request.params.id,
+    user: request.user,
+  });
+  if (!valid) {
+    return response.status(400).json({ validateError });
+  }
+
+  const { _document, error: updateError } = await updateDocument({
+    ...request.body,
+    documentId: request.params.id,
+  });
+  if (updateError) {
+    return response.status(500).json({ updateError });
+  }
+  response.status(200).json({success: true});
 })
 
 module.exports = router;

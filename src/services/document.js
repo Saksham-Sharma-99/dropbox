@@ -143,6 +143,35 @@ const validateShareParams = async ({ documentIds, userEmails, accessType, user }
     return { valid: true };
 }
 
+const validateUpdateParams = async ({ documentId, user }) => {
+    if (!documentId) {
+        return { error: 'Missing required parameters', valid: false };
+    }
+
+    const document = await Document.findOne({
+        where: {
+            id: documentId,
+            status: "active",
+        }
+    })
+    if (!document) {
+        return { error: 'Invalid document id', valid: false };
+    }
+
+    const accessList = await AccessList.findOne({
+        where: {
+            documentId: documentId,
+            userId: user.id,
+            status: "active"
+        }
+    })
+    if (!accessList) {
+        return { error: 'You do not have access to the document', valid: false };
+    }
+
+    return { valid: true };
+}
+
 const shareDocuments = async ({ documentIds, userEmails, accessType }) => {
     try {
         const users = await User.findAll({
@@ -211,6 +240,41 @@ const shareDocuments = async ({ documentIds, userEmails, accessType }) => {
     }
 }
 
-module.exports = {
-    createDocument, getDocumentsList, getDocument, validateShareParams, shareDocuments
+const updateDocument = async ({ documentId, status, title, description }) => {
+    try{
+        const transaction = await sequelize.transaction();
+        const document = await Document.findOne({
+            where: {
+                id: documentId,
+                status: "active",
+            }
+        })
+
+        if (title){
+            document.title = title;
+        }
+        if (description){
+            document.description = description;
+        }
+        if (status){
+            document.status = status;
+        }
+
+        await document.save({ transaction });
+        await transaction.commit();
+
+        return { document, error: null };
+    } catch (error) {
+        return { error: error.message, document: null };
+    }
 }
+
+module.exports = {
+  createDocument,
+  getDocumentsList,
+  getDocument,
+  validateShareParams,
+  shareDocuments,
+  validateUpdateParams,
+  updateDocument
+};
