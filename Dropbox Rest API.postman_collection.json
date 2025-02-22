@@ -1,0 +1,313 @@
+{
+	"info": {
+		"_postman_id": "6bf99911-ed54-4bb5-9202-dc40412096bf",
+		"name": "Dropbox Rest API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30214304",
+		"_collection_link": "https://bold-robot-338284.postman.co/workspace/My-Workspace~d28f60cc-ed6a-4c8a-81bf-f84dbd38a2c8/collection/30214304-6bf99911-ed54-4bb5-9202-dc40412096bf?action=share&source=collection_link&creator=30214304"
+	},
+	"item": [
+		{
+			"name": "document upload",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "1:1740255215268:0b7a1e90-a3ee-4f09-a9b3-1e1f9bd9be9b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "document",
+							"type": "file",
+							"src": "/Users/sakshamsharma/Downloads/Saksham_resume.pdf"
+						},
+						{
+							"key": "title",
+							"value": "Resume",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{base_url}}/api/document"
+			},
+			"response": []
+		},
+		{
+			"name": "get documents",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "1:1740255215268:0b7a1e90-a3ee-4f09-a9b3-1e1f9bd9be9b",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/document?page=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"document"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "accessType",
+							"value": "owner",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "share documents",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "1:1740255215268:0b7a1e90-a3ee-4f09-a9b3-1e1f9bd9be9b",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/document/access",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"document",
+						"access"
+					],
+					"query": [
+						{
+							"key": "accessType",
+							"value": "owner",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update document",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "1:1740255215268:0b7a1e90-a3ee-4f09-a9b3-1e1f9bd9be9b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Sas Resume\",\n    \"status\": \"inactive\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/document/5",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"document",
+						"5"
+					],
+					"query": [
+						{
+							"key": "accessType",
+							"value": "owner",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get document",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "1:1740255215268:0b7a1e90-a3ee-4f09-a9b3-1e1f9bd9be9b",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/document/6",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"document",
+						"6"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "accessType",
+							"value": "owner",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user create",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "app",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Saksham\",\n    \"lastName\": \"Sharma\",\n    \"email\": \"saksham_s@mt.iitr.ac.in\",\n    \"password\": \"Saksham@99\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/api/user"
+			},
+			"response": []
+		},
+		{
+			"name": "login user",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "app",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"saksham_s@mt.iitr.ac.in\",\n    \"password\": \"Saksham@99\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/api/user/login"
+			},
+			"response": []
+		},
+		{
+			"name": "logout user",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "1:1740255215268:0b7a1e90-a3ee-4f09-a9b3-1e1f9bd9be9b",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}/api/user/logout"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:4000",
+			"type": "string"
+		}
+	]
+}

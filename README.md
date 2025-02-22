@@ -32,6 +32,10 @@ To set up the database using Docker, follow these steps:
 
 ## Routes
 
+### Postman Collection
+
+- Dropbox Rest API.postman_collection.json
+
 ### User Routes
 
 - POST /api/users - Create a new user
@@ -42,4 +46,3 @@ To set up the database using Docker, follow these steps:
 - GET /api/documents - Get a list of documents
 - GET /api/documents/:id - Get document details
 - PATCH /api/documents/:id - Update document details
-- DELETE /api/documents/:id - Delete a document
